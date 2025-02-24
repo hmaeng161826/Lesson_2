@@ -1,43 +1,48 @@
 def prompt(message):
-    print(f'=>{message}')
+    print(f"==> {message}")
 
-def invalid(number_str):
+def invalid_number(number_str):
     try:
         int(number_str)
     except ValueError:
         return True
-    
+
     return False
 
-prompt('Welcome to calculator!')
+prompt('Welcome to Calculator!')
 
-prompt('Enter the first number: ')
-num1 = input()
-while invalid(num1):
-    prompt("Hmm... that doesn't look like a valid number")
-    num1 = input()
+prompt("What's the first number?")
+number1 = input()
 
-prompt('Enter the second number: ')
-num2 = input()
-while invalid(num2):
-    prompt("Hmm... that doesn't look like a valid number")
-    num2 = input()
+while invalid_number(number1):
+    prompt("Hmm... that doesn't look like a valid number.")
+    number1 = input()
 
-prompt("Enter the type of operation to perform: 'add', 'subtract',"
-                  "'multiply' or 'divide': ")
+prompt("What's the second number?")
+number2 = input()
+
+while invalid_number(number2):
+    prompt("Hmm... that doesn't look like a valid number.")
+    number2 = input()
+
+prompt("What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide")
 operation = input()
-while operation not in ['add', 'subtract', 'multiply', 'divide']:
-    prompt("Hmm... that doesn't look like a valid number")
+
+while operation not in ["1", "2", "3", "4"]:
+    prompt("You must choose 1, 2, 3, or 4")
     operation = input()
 
 match operation:
-    case 'add':
-        output = int(num1) + int(num2)
-    case 'subtract':
-        output = int(num1)- int(num2)
-    case 'multiply':
-        output = int(num1) * int(num2)
-    case 'divide':
-        output = int(num1)/ int(num2)
-        
-print(f'The result is {output}')
+    case "1":
+        output = int(number1) + int(number2)
+    case "2":
+        output = int(number1) - int(number2)
+    case "3":
+        output = int(number1) * int(number2)
+    case "4":
+        output = int(number1) / int(number2)
+
+prompt(f"The result is {output}")
+
+
+#TRYTRY
