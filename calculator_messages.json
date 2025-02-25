@@ -1,0 +1,30 @@
+{
+    "greeting": {
+        "en": "Welcome to Calculator!",
+        "kr": "계산기 사용을 환영합니다!"
+    },
+    "first_number": {
+        "en": "What's the first number?",
+        "kr": "첫번째 숫자를 입력해주세요."
+    },
+    "second_number": {
+        "en": "What's the second number?",
+        "kr": "두번째 숫자를 입력해주세요."
+    },
+    "invalid_number": {
+        "en": "Hmm... that doesn't look like a valid number.",
+        "kr": "흠... 올바른 숫자가 입력 되지 않았습니다."
+    },
+    "operation": {
+        "en": "What operation would you like to perform? 1) Add 2) Subtract 3) Multiply 4) Divide",
+        "kr": "어떤 계산을 하고 싶으십니까? 1) 더하기 2) 빼기 3) 곱하기 4) 나누기"
+    },
+    "invalid_operation" : {
+        "en": "You must choose 1, 2, 3, or 4",
+        "kr": "1, 2, 3 또는 4 중에서 하나를 선택해야합니다."
+    },
+    "another_calculation" :{
+        "en": "Would you like to perform another calculation? (y/n): ",
+        "kr": "또다른 계산을 진행하시겠습니까?"
+    }
+}

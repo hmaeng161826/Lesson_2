@@ -1,3 +1,7 @@
+import json
+with open('calculator_messages.json', 'r') as file:
+    MESSAEGS = json.load(file)
+
 def prompt(message):
     print(f"==> {message}")
 
@@ -10,26 +14,26 @@ def invalid_number(number_str):
     return False
 
 def calculator():
-    prompt('Welcome to Calculator!')
-    prompt("What's the first number?")
+    prompt(MESSAEGS['greeting'])
+    prompt(MESSAEGS['first_number'])
     number1 = input()
 
     while invalid_number(number1):
-        prompt("Hmm... that doesn't look like a valid number.")
+        prompt(MESSAEGS['invalid_number'])
         number1 = input()
 
-    prompt("What's the second number?")
+    prompt(MESSAEGS['second_number'])
     number2 = input()
 
     while invalid_number(number2):
-        prompt("Hmm... that doesn't look like a valid number.")
+        prompt(MESSAEGS['invalid_number'])
         number2 = input()
 
-    prompt("What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide")
+    prompt(MESSAEGS['operation'])
     operation = input()
 
     while operation not in ["1", "2", "3", "4"]:
-        prompt("You must choose 1, 2, 3, or 4")
+        prompt(MESSAEGS['invalid_operation'])
         operation = input()
 
     match operation:
@@ -46,7 +50,7 @@ def calculator():
 
 while True:
     calculator()
-    prompt(f"Would you like to perform another calculation? (y/n): ")
+    prompt(MESSAEGS['another_calculation'])
     response = input().lower()
     if response and response[0] != 'y':
         break
