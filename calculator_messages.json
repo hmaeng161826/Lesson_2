@@ -1,5 +1,4 @@
-{
-    "greeting": {
+{ "greeting": {
         "en": "Welcome to Calculator!",
         "kr": "계산기 사용을 환영합니다!"
     },
