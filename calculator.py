@@ -6,7 +6,6 @@ def prompt(message):
 def invalid_number(number_str):
     try:
         float(number_str)
-    
     except ValueError:
         return True
 
@@ -31,7 +30,6 @@ while True:
             break
 
         prompt(MESSAGES['invalid_number'][language])
-    
     while True:
         prompt(MESSAGES['second_number'][language])
         number2 = input()
@@ -49,7 +47,6 @@ while True:
             break
 
         prompt(MESSAGES['invalid_operation'][language])
-        
     match operation:
         case "1":
             output = float(number1) + float(number2)
@@ -66,4 +63,3 @@ while True:
     response = input()
     if response[0].lower() != 'y':
         break
-    
