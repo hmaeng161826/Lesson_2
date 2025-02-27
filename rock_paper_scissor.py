@@ -1,5 +1,4 @@
 import random
-import pdb
 
 VALID_CHOICES = ['rock', 'paper', 'scissors']
 
