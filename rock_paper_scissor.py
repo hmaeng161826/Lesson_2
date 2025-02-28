@@ -1,24 +1,34 @@
 import random
 
 VALID_CHOICES = ['rock', 'paper', 'scissors', 'lizard', 'spock']
+CHOICE_SHORTCUTS = {
+    'r' : 'rock',
+    'p' : 'paper',
+    'sc' : 'scissors',
+    'l' : 'lizard',
+    's' : 'spock',
+}
+SHORTCUTS_KEYS = list(CHOICE_SHORTCUTS.keys())
 
 def prompt(message):
     print(f'==>{message}')
 
-def invalid(string, choices):
-    return string not in choices
+def invalid(input, valid_choices):
+    return input not in valid_choices
 
 prompt('Welcome to Rock Paper Scissors Spock Lizard')
 
 while True:
-    prompt(f"Choose one: {', '.join(VALID_CHOICES)} ")
-    user_choice = input()
-
-    while invalid(user_choice, VALID_CHOICES):
-        prompt(f"Please enter a valid input: {VALID_CHOICES}")
-        user_choice = input()
+    prompt(f"Choose one: {', '.join(VALID_CHOICES)} or shortcuts: r, p, sc, l, s ")
+    user_choice = input().lower()
+    while user_choice not in VALID_CHOICES and user_choice not in SHORTCUTS_KEYS:
+        prompt(f"Please enter a valid input: {', '.join(VALID_CHOICES)} or {', '.join(SHORTCUTS_KEYS)}")
+        user_choice = input().lower()
+    if user_choice in SHORTCUTS_KEYS:
+        user_choice = CHOICE_SHORTCUTS[user_choice]
 
     computer_choice = random.choice(VALID_CHOICES)
+    prompt(f'You chose {user_choice}!')
     prompt(f'The computer chose {computer_choice}!')
 
     if (
