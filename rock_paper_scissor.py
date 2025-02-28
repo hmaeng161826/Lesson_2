@@ -1,30 +1,33 @@
 import random
 
 VALID_CHOICES = ['rock', 'paper', 'scissors', 'lizard', 'spock']
+
 CHOICE_SHORTCUTS = {
     'r' : 'rock',
     'p' : 'paper',
     'sc' : 'scissors',
     'l' : 'lizard',
-    's' : 'spock',
+    'sp' : 'spock',
 }
-SHORTCUTS_KEYS = list(CHOICE_SHORTCUTS.keys())
+VALID_KEYS = list(CHOICE_SHORTCUTS.keys())
 
 def prompt(message):
     print(f'==>{message}')
 
-def invalid(input, valid_choices):
-    return input not in valid_choices
+def invalid(input, valid_option_1, valid_option_2):
+    return input not in valid_option_1 and input not in valid_option_2
 
 prompt('Welcome to Rock Paper Scissors Spock Lizard')
 
 while True:
-    prompt(f"Choose one: {', '.join(VALID_CHOICES)} or shortcuts: r, p, sc, l, s ")
+    prompt(f"Choose one: {', '.join(VALID_CHOICES)} or shortcuts: r, p, sc, l, sp ")
     user_choice = input().lower()
-    while user_choice not in VALID_CHOICES and user_choice not in SHORTCUTS_KEYS:
-        prompt(f"Please enter a valid input: {', '.join(VALID_CHOICES)} or {', '.join(SHORTCUTS_KEYS)}")
+
+    while invalid(user_choice, VALID_CHOICES, VALID_KEYS):
+        prompt(f"Please enter a valid input: {', '.join(VALID_CHOICES)} or {', '.join(VALID_KEYS)}")
         user_choice = input().lower()
-    if user_choice in SHORTCUTS_KEYS:
+
+    if user_choice in VALID_KEYS:
         user_choice = CHOICE_SHORTCUTS[user_choice]
 
     computer_choice = random.choice(VALID_CHOICES)
@@ -52,6 +55,7 @@ while True:
 
     prompt('Do you want to play again (y/n)?') 
     response = input().lower()
+
     while True:
         if response[0] == 'y' or response[0] == 'n':
             break
