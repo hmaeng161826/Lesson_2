@@ -11,15 +11,26 @@ CHOICE_SHORTCUTS = {
 }
 VALID_KEYS = list(CHOICE_SHORTCUTS.keys())
 
+computer_wins = 0
+user_wins = 0
+round = 1
+
 def prompt(message):
     print(f'==>{message}')
 
 def invalid(input, valid_option_1, valid_option_2):
     return input not in valid_option_1 and input not in valid_option_2
 
+def winner():
+    if computer_wins == 3:
+        return 'computer'
+    elif user_wins == 3:
+        return 'you'
+
 prompt('Welcome to Rock Paper Scissors Spock Lizard')
 
-while True:
+while round <= 5:
+    prompt(f'Round {round}!')
     prompt(f"Choose one: {', '.join(VALID_CHOICES)} or shortcuts: r, p, sc, l, sp ")
     user_choice = input().lower()
 
@@ -41,7 +52,10 @@ while True:
     ((user_choice == 'paper' or user_choice == 'spock') and computer_choice == 'lizard') or
     ((user_choice == 'scissors' or user_choice == 'rock') and computer_choice == 'spock')
     ):
+        computer_wins += 1
         prompt("Computer wins!")
+        prompt(f'Computer {computer_wins} : You {user_wins}')
+        
     elif (
     (user_choice == 'rock' and (computer_choice == 'scissors' or computer_choice == 'lizard')) or
     (user_choice == 'scissors' and (computer_choice == 'paper' or computer_choice == 'lizard')) or
@@ -49,9 +63,20 @@ while True:
     (user_choice == 'lizard' and (computer_choice == 'paper' or computer_choice == 'spock')) or
     (user_choice == 'spock' and (computer_choice == 'scissors' or computer_choice == 'rock'))
     ):
+        user_wins += 1
         prompt("You win!")
+        prompt(f'Computer {computer_wins} : You {user_wins}')
     else:
         prompt("It's a tie!")
+        prompt(f'Computer {computer_wins} : You {user_wins}')
+    
+    round += 1
+
+    if winner():
+        prompt(f'The grand winner is {winner()}!')
+        break
+    elif round > 5:
+        break
 
     prompt('Do you want to play again (y/n)?') 
     response = input().lower()
@@ -61,7 +86,6 @@ while True:
             break
         prompt("Invalid input. Please enter 'y' or 'n'.")
         response = input().lower()
+    
     if response[0] != 'y':
-        break       
-
-
+        break
