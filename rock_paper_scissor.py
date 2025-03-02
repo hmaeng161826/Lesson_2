@@ -19,8 +19,11 @@ def prompt(message):
 def invalid(user_input, valid_option_1, valid_option_2):
     return user_input not in valid_option_1 + valid_option_2
 
-def display_winner():
+def display_winner(user, computer):
     global user_wins, computer_wins
+    prompt(f'You chose {user}!')
+    prompt(f'The computer chose {computer}!')
+
     if (
     (user_choice in ('rock', 'spock') and computer_choice == 'paper')
     or (user_choice in ('paper', 'lizard') and computer_choice == 'scissors')
@@ -53,8 +56,6 @@ def grand_winner():
     if user_wins == 3:
         return 'you'
 
-    return 'no one'
-
 def display_current_score():
     prompt(f'Computer {computer_wins} : You {user_wins}')
 
@@ -79,10 +80,8 @@ while game_round <= 5:
         user_choice = CHOICE_SHORTCUTS[user_choice]
 
     computer_choice = random.choice(VALID_CHOICES)
-    prompt(f'You chose {user_choice}!')
-    prompt(f'The computer chose {computer_choice}!')
 
-    display_winner()
+    display_winner(user_choice, computer_choice)
 
     game_round += 1
 
