@@ -1,3 +1,5 @@
+# pylint: disable=invalid-name
+
 import random
 
 VALID_CHOICES = ['rock', 'paper', 'scissors', 'lizard', 'spock']
@@ -11,31 +13,66 @@ CHOICE_SHORTCUTS = {
 }
 VALID_KEYS = list(CHOICE_SHORTCUTS.keys())
 
-computer_wins = 0
-user_wins = 0
-round = 1
-
 def prompt(message):
     print(f'==>{message}')
 
-def invalid(input, valid_option_1, valid_option_2):
-    return input not in valid_option_1 and input not in valid_option_2
+def invalid(user_input, valid_option_1, valid_option_2):
+    return user_input not in valid_option_1 + valid_option_2
 
-def winner():
+def display_winner():
+    global user_wins, computer_wins
+    if (
+    (user_choice in ('rock', 'spock') and computer_choice == 'paper')
+    or (user_choice in ('paper', 'lizard') and computer_choice == 'scissors')
+    or (user_choice in ('scissors', 'lizard') and computer_choice == 'rock')
+    or (user_choice in ('paper', 'spock') and computer_choice == 'lizard')
+    or (user_choice in ('scissors', 'rock') and computer_choice == 'spock')
+    ):
+        computer_wins += 1
+        prompt("Computer wins!")
+        prompt(f'Computer {computer_wins} : You {user_wins}')
+
+    elif (
+    (user_choice == 'rock' and computer_choice in ('scissors', 'lizard'))
+    or (user_choice == 'scissors' and computer_choice in ('paper', 'lizard'))
+    or (user_choice == 'paper' and computer_choice in ('rock', 'spock'))
+    or (user_choice == 'lizard' and computer_choice in ('paper', 'spock'))
+    or (user_choice == 'spock' and computer_choice in ('scissors', 'rock'))
+):
+        user_wins += 1
+        prompt("You win!")
+        display_current_score()
+    else:
+        prompt("It's a tie!")
+        display_current_score()
+
+def grand_winner():
     if computer_wins == 3:
         return 'computer'
-    elif user_wins == 3:
+
+    if user_wins == 3:
         return 'you'
+
+    return 'no one'
+
+def display_current_score():
+    prompt(f'Computer {computer_wins} : You {user_wins}')
+
+computer_wins = 0
+user_wins = 0
+game_round = 1
 
 prompt('Welcome to Rock Paper Scissors Spock Lizard')
 
-while round <= 5:
-    prompt(f'Round {round}!')
-    prompt(f"Choose one: {', '.join(VALID_CHOICES)} or shortcuts: r, p, sc, l, sp ")
+while game_round <= 5:
+    prompt(f'Round {game_round}!')
+    prompt(f"Choose one: {', '.join(VALID_CHOICES)}"
+           f"(or shortcuts: r, p, sc, l, sp)")
     user_choice = input().lower()
 
     while invalid(user_choice, VALID_CHOICES, VALID_KEYS):
-        prompt(f"Please enter a valid input: {', '.join(VALID_CHOICES)} or {', '.join(VALID_KEYS)}")
+        prompt(f"Please enter a valid input: {', '.join(VALID_CHOICES)}"
+               f"(or {', '.join(VALID_KEYS)})")
         user_choice = input().lower()
 
     if user_choice in VALID_KEYS:
@@ -45,40 +82,18 @@ while round <= 5:
     prompt(f'You chose {user_choice}!')
     prompt(f'The computer chose {computer_choice}!')
 
-    if (
-    ((user_choice == 'rock' or user_choice == 'spock') and computer_choice == 'paper') or
-    ((user_choice == 'paper' or user_choice =='lizard') and computer_choice == 'scissors') or
-    ((user_choice == 'scissors' or user_choice == 'lizard') and computer_choice == 'rock') or
-    ((user_choice == 'paper' or user_choice == 'spock') and computer_choice == 'lizard') or
-    ((user_choice == 'scissors' or user_choice == 'rock') and computer_choice == 'spock')
-    ):
-        computer_wins += 1
-        prompt("Computer wins!")
-        prompt(f'Computer {computer_wins} : You {user_wins}')
-        
-    elif (
-    (user_choice == 'rock' and (computer_choice == 'scissors' or computer_choice == 'lizard')) or
-    (user_choice == 'scissors' and (computer_choice == 'paper' or computer_choice == 'lizard')) or
-    (user_choice == 'paper' and (computer_choice == 'rock' or computer_choice == 'spock')) or
-    (user_choice == 'lizard' and (computer_choice == 'paper' or computer_choice == 'spock')) or
-    (user_choice == 'spock' and (computer_choice == 'scissors' or computer_choice == 'rock'))
-    ):
-        user_wins += 1
-        prompt("You win!")
-        prompt(f'Computer {computer_wins} : You {user_wins}')
-    else:
-        prompt("It's a tie!")
-        prompt(f'Computer {computer_wins} : You {user_wins}')
-    
-    round += 1
+    display_winner()
 
-    if winner():
-        prompt(f'The grand winner is {winner()}!')
-        break
-    elif round > 5:
+    game_round += 1
+
+    if grand_winner():
+        prompt(f'The grand winner is {grand_winner()}!')
         break
 
-    prompt('Do you want to play again (y/n)?') 
+    if game_round > 5:
+        break
+
+    prompt('Do you want to play again (y/n)?')
     response = input().lower()
 
     while True:
@@ -86,6 +101,6 @@ while round <= 5:
             break
         prompt("Invalid input. Please enter 'y' or 'n'.")
         response = input().lower()
-    
+
     if response[0] != 'y':
         break
