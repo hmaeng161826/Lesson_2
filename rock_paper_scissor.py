@@ -1,6 +1,17 @@
 # pylint: disable=invalid-name
 
 import random
+GAME_NAME = 'rock, paper, scissors, lizard, spock'
+
+TOTAL_ROUNDS = 5
+
+WINNING_SCORES = 3
+
+GAME_RULE = (
+    f'You will be playing {GAME_NAME} against the computer. '
+    f'There will be a total of {TOTAL_ROUNDS} unless you quit before it. '
+    f'Whoever wins {WINNING_SCORES} rounds first will be the grand winner!'
+    )
 
 VALID_CHOICES = ['rock', 'paper', 'scissors', 'lizard', 'spock']
 
@@ -11,101 +22,108 @@ CHOICE_SHORTCUTS = {
     'l' : 'lizard',
     'sp' : 'spock',
 }
+
 VALID_KEYS = list(CHOICE_SHORTCUTS.keys())
+
+WINNING_COMBOS = {
+    'rock': ['scissors', 'lizard'],
+    'scissors': ['paper', 'lizard'],
+    'paper': ['rock', 'spock'],
+    'lizard': ['paper', 'spock'],
+    'spock': ['scissors', 'rock'],
+}
+
+
+score = {
+    'player' : 0,
+    'computer' : 0,
+}
 
 def prompt(message):
     print(f'==>{message}')
 
-def invalid(user_option, valid_option_1, valid_option_2):
-    return user_option not in valid_option_1 + valid_option_2
+def display_initial_msg():
+    prompt(f'Welcome to {GAME_NAME}!')
+    prompt(GAME_RULE)
 
-def player_wins(user_choice, computer_choice):
-    if(
-        (user_choice == 'rock' and computer_choice == 'scissors') or
-        (user_choice == 'rock' and computer_choice == 'lizard') or
-        (user_choice == 'scissors' and computer_choice == 'paper') or
-        (user_choice == 'scissors' and computer_choice == 'lizard') or
-        (user_choice == 'paper' and computer_choice == 'rock') or
-        (user_choice == 'paper' and computer_choice == 'spock') or
-        (user_choice == 'lizard' and computer_choice == 'paper') or
-        (user_choice == 'lizard' and computer_choice =='spock') or
-        (user_choice == 'spock' and computer_choice == 'scissors') or
-        (user_choice == 'spock' and computer_choice == 'rock')
-    ):
-        return True
-    else:
-        return False
+def invalid(player_option, valid_option_1, valid_option_2):
+    return player_option not in valid_option_1 + valid_option_2
 
-def display_winner(user, computer, user_winning, computer_winning):
-    prompt(f'You chose {user}!')
-    prompt(f'The computer chose {computer}!')
-
-    if player_wins(user, computer):
-        user_winning += 1
-        prompt("You win!")
-    elif user == computer:
-        prompt("It's a tie!")
-    else:
-        computer_winning += 1
-        prompt("Computer wins!")
-
-    return user_winning, computer_winning
-
-def display_current_score(user_wins_score, computer_wins_score):
-    prompt(f'Computer {computer_wins_score} : You {user_wins_score}')
-
-def grand_winner(user_grand_wins, computer_grand_wins):
-    if computer_grand_wins == 3:
-        return 'computer'
-
-    if user_grand_wins == 3:
-        return 'you'
-
-computer_wins = 0
-user_wins = 0
-game_round = 1
-
-prompt('Welcome to Rock Paper Scissors Spock Lizard')
-
-while game_round <= 5:
+def ask_choice(game_round):
     prompt(f'Round {game_round}!')
     prompt(f"Choose one: {', '.join(VALID_CHOICES)}"
            f"(or shortcuts: r, p, sc, l, sp)")
-    user_input = input().lower()
+    player_choice = input().lower()
 
-    while invalid(user_input, VALID_CHOICES, VALID_KEYS):
+    while invalid(player_choice, VALID_CHOICES, VALID_KEYS):
         prompt(f"Please enter a valid input: {', '.join(VALID_CHOICES)}"
                f"(or {', '.join(VALID_KEYS)})")
-        user_input = input().lower()
+        player_choice = input().lower()
 
-    if user_input in VALID_KEYS:
-        user_input = CHOICE_SHORTCUTS[user_input]
+    if player_choice in VALID_KEYS:
+        player_choice = CHOICE_SHORTCUTS[player_choice]
 
-    computer_input = random.choice(VALID_CHOICES)
+    computer_choice = random.choice(VALID_CHOICES)
 
-    user_wins, computer_wins = display_winner(user_input,
-                                computer_input, user_wins, computer_wins)
+    return player_choice, computer_choice
 
-    display_current_score(user_wins, computer_wins)
+def display_winner(player_choice, computer_choice):
+    prompt(f'You chose {player_choice}!')
+    prompt(f'The computer chose {computer_choice}!')
 
-    game_round += 1
+    if computer_choice in WINNING_COMBOS[player_choice]:
+        score['player'] += 1
+        prompt('You win!')
+    elif computer_choice == player_choice:
+        prompt("It's a tie!")
+    else:
+        score['computer'] += 1
+        prompt('Computer wins!')
 
-    if grand_winner(user_wins, computer_wins):
-        prompt(f'The grand winner is'
-               f'{grand_winner(user_wins, computer_wins)}!')
-        break
+def display_current_score():
+    prompt(f'The Current Score -> Computer {score['computer']} : '
+           f'You {score['player']}')
 
-    if game_round > 5:
-        break
+def grand_winner():
+    if score['computer'] == WINNING_SCORES:
+        return 'computer'
 
+    if score['player'] == WINNING_SCORES:
+        return 'you'
+
+def ask_play_again():
     prompt('Do you want to play again (y/n)?')
     response = input().lower()
 
     while True:
-        if response[0] == 'y' or response[0] == 'n':
-            break
-        prompt("Invalid input. Please enter 'y' or 'n'.")
-        response = input().lower()
+        if response[0] == 'y':
+            return True
+        elif response[0] == 'n':
+            return False
+        else:
+            prompt("Invalid input. Please enter 'y' or 'n'.")
+            response = input().lower()
 
-    if response[0] != 'y':
-        break
+def play_game():
+    game_round = 1
+    while game_round <= TOTAL_ROUNDS:
+        display_initial_msg()
+
+        player_choice, computer_choice = ask_choice(game_round)
+
+        display_winner(player_choice, computer_choice)
+
+        display_current_score()
+
+        if grand_winner():
+            prompt(f'The grand winnder is {grand_winner()}!')
+            break
+
+        game_round += 1
+
+        if not ask_play_again():
+            prompt('Thank you for playing. Goodbye!')
+            break
+
+
+play_game()
